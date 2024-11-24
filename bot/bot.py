@@ -117,7 +117,7 @@ async def start_handle(update: Update, context: CallbackContext):
     reply_text += messages.HELP_MESSAGE
 
     await update.message.reply_text(reply_text, parse_mode=ParseMode.HTML)
-    await show_chat_modes_handle(update, context)
+    # await show_chat_modes_handle(update, context)
 
 
 async def help_handle(update: Update, context: CallbackContext):
@@ -978,9 +978,9 @@ def run_bot() -> None:
 
     application.add_handler(CommandHandler("start", start_handle, filters=user_filter))
     application.add_handler(CommandHandler("help", help_handle, filters=user_filter))
-    application.add_handler(
-        CommandHandler("help_group_chat", help_group_chat_handle, filters=user_filter)
-    )
+    # application.add_handler(
+    #     CommandHandler("help_group_chat", help_group_chat_handle, filters=user_filter)
+    # )
 
     application.add_handler(
         MessageHandler(filters.TEXT & ~filters.COMMAND & user_filter, message_handle)
@@ -1007,32 +1007,35 @@ def run_bot() -> None:
         CommandHandler("cancel", cancel_handle, filters=user_filter)
     )
 
+    # application.add_handler(
+    #     MessageHandler(filters.VOICE & user_filter, voice_message_handle)
+    # )
     application.add_handler(
-        MessageHandler(filters.VOICE & user_filter, voice_message_handle)
+        MessageHandler(filters.VOICE & user_filter, unsupport_message_handle)
     )
 
-    application.add_handler(
-        CommandHandler("mode", show_chat_modes_handle, filters=user_filter)
-    )
-    application.add_handler(
-        CallbackQueryHandler(
-            show_chat_modes_callback_handle, pattern="^show_chat_modes"
-        )
-    )
-    application.add_handler(
-        CallbackQueryHandler(set_chat_mode_handle, pattern="^set_chat_mode")
-    )
+    # application.add_handler(
+    #     CommandHandler("mode", show_chat_modes_handle, filters=user_filter)
+    # )
+    # application.add_handler(
+    #     CallbackQueryHandler(
+    #         show_chat_modes_callback_handle, pattern="^show_chat_modes"
+    #     )
+    # )
+    # application.add_handler(
+    #     CallbackQueryHandler(set_chat_mode_handle, pattern="^set_chat_mode")
+    # )
 
-    application.add_handler(
-        CommandHandler("settings", settings_handle, filters=user_filter)
-    )
-    application.add_handler(
-        CallbackQueryHandler(set_settings_handle, pattern="^set_settings")
-    )
+    # application.add_handler(
+    #     CommandHandler("settings", settings_handle, filters=user_filter)
+    # )
+    # application.add_handler(
+    #     CallbackQueryHandler(set_settings_handle, pattern="^set_settings")
+    # )
 
-    application.add_handler(
-        CommandHandler("balance", show_balance_handle, filters=user_filter)
-    )
+    # application.add_handler(
+    #     CommandHandler("balance", show_balance_handle, filters=user_filter)
+    # )
 
     application.add_error_handler(error_handle)
 
