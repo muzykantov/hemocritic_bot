@@ -117,7 +117,7 @@ async def start_handle(update: Update, context: CallbackContext):
     reply_text += messages.HELP_MESSAGE
 
     await update.message.reply_text(reply_text, parse_mode=ParseMode.HTML)
-    # await show_chat_modes_handle(update, context)
+    await show_chat_modes_handle(update, context)
 
 
 async def help_handle(update: Update, context: CallbackContext):
@@ -299,8 +299,11 @@ async def _vision_message_handle_fn(
                         "text": message,
                     },
                     {
-                        "type": "image",
-                        "image": base_image,
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpeg;base64,{base_image}",
+                            "detail": "high",
+                        },
                     },
                 ],
                 "bot": answer,
@@ -640,7 +643,7 @@ async def new_dialog_handle(update: Update, context: CallbackContext):
 
     user_id = update.message.from_user.id
     db.set_user_attribute(user_id, "last_interaction", datetime.now())
-    db.set_user_attribute(user_id, "current_model", "gpt-3.5-turbo")
+    db.set_user_attribute(user_id, "current_model", "gpt-4o")
 
     db.start_new_dialog(user_id)
     await update.message.reply_text("Starting new dialog ✅")
@@ -956,7 +959,7 @@ def run_bot() -> None:
         ApplicationBuilder()
         .token(config.telegram_token)
         .concurrent_updates(True)
-        .rate_limiter(AIORateLimiter(max_retries=5))
+        .rate_limiter(AIORateLimiter(max_retries=2))
         .http_version("1.1")
         .get_updates_http_version("1.1")
         .post_init(post_init)
@@ -1014,17 +1017,17 @@ def run_bot() -> None:
         MessageHandler(filters.VOICE & user_filter, unsupport_message_handle)
     )
 
-    # application.add_handler(
-    #     CommandHandler("mode", show_chat_modes_handle, filters=user_filter)
-    # )
-    # application.add_handler(
-    #     CallbackQueryHandler(
-    #         show_chat_modes_callback_handle, pattern="^show_chat_modes"
-    #     )
-    # )
-    # application.add_handler(
-    #     CallbackQueryHandler(set_chat_mode_handle, pattern="^set_chat_mode")
-    # )
+    application.add_handler(
+        CommandHandler("mode", show_chat_modes_handle, filters=user_filter)
+    )
+    application.add_handler(
+        CallbackQueryHandler(
+            show_chat_modes_callback_handle, pattern="^show_chat_modes"
+        )
+    )
+    application.add_handler(
+        CallbackQueryHandler(set_chat_mode_handle, pattern="^set_chat_mode")
+    )
 
     # application.add_handler(
     #     CommandHandler("settings", settings_handle, filters=user_filter)
