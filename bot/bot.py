@@ -175,7 +175,7 @@ async def _vision_message_handle_fn(
 
     if current_model != "gpt-4-vision-preview" and current_model != "gpt-4o":
         await update.message.reply_text(
-            "🥲 Images processing is only available for <b>gpt-4-vision-preview</b> and <b>gpt-4o</b> model. Please change your settings in /settings",
+            "🥲 Обработка изображений доступна только для моделей <b>gpt-4-vision-preview</b> и <b>gpt-4o</b>. Пожалуйста, измените настройки в /settings",
             parse_mode=ParseMode.HTML,
         )
         return
@@ -330,7 +330,7 @@ async def _vision_message_handle_fn(
         raise
 
     except Exception as e:
-        error_text = f"Something went wrong during completion. Reason: {e}"
+        error_text = messages.MESSAGES["error_completion"].format(reason=str(e))
         logger.error(error_text)
         await update.message.reply_text(error_text)
         return
@@ -339,7 +339,7 @@ async def _vision_message_handle_fn(
 async def unsupport_message_handle(
     update: Update, context: CallbackContext, message=None
 ):
-    error_text = f"I don't know how to read files or videos. Send the picture in normal mode (Quick Mode)."
+    error_text = messages.MESSAGES["file_not_supported"]
     logger.error(error_text)
     await update.message.reply_text(error_text)
     return
@@ -386,7 +386,9 @@ async def message_handle(
             ) > 0:
                 db.start_new_dialog(user_id)
                 await update.message.reply_text(
-                    f"Starting new dialog due to timeout (<b>{config.chat_modes[chat_mode]['name']}</b> mode) ✅",
+                    messages.MESSAGES["timeout_new_dialog"].format(
+                        mode_name=config.chat_modes[chat_mode]["name"]
+                    ),
                     parse_mode=ParseMode.HTML,
                 )
         db.set_user_attribute(user_id, "last_interaction", datetime.now())
@@ -497,7 +499,7 @@ async def message_handle(
             raise
 
         except Exception as e:
-            error_text = f"Something went wrong during completion. Reason: {e}"
+            error_text = messages.MESSAGES["error_completion"].format(reason=str(e))
             logger.error(error_text)
             await update.message.reply_text(error_text)
             return
@@ -552,8 +554,7 @@ async def is_previous_message_not_answered_yet(
 
     user_id = update.message.from_user.id
     if user_semaphores[user_id].locked():
-        text = "⏳ Please <b>wait</b> for a reply to the previous message\n"
-        text += "Or you can /cancel it"
+        text = messages.MESSAGES["wait_for_answer"]
         await update.message.reply_text(
             text, reply_to_message_id=update.message.id, parse_mode=ParseMode.HTML
         )
@@ -617,11 +618,13 @@ async def generate_image_handle(update: Update, context: CallbackContext, messag
         if str(e).startswith(
             "Your request was rejected as a result of our safety system"
         ):
-            text = "🥲 Your request <b>doesn't comply</b> with OpenAI's usage policies.\nWhat did you write there, huh?"
-            await update.message.reply_text(text, parse_mode=ParseMode.HTML)
-            return
+            await update.message.reply_text(
+                messages.MESSAGES["image_safety_error"], parse_mode=ParseMode.HTML
+            )
         else:
-            raise
+            await update.message.reply_text(
+                messages.MESSAGES["error_invalid_request"], parse_mode=ParseMode.HTML
+            )
 
     # token usage
     db.set_user_attribute(
@@ -646,7 +649,7 @@ async def new_dialog_handle(update: Update, context: CallbackContext):
     db.set_user_attribute(user_id, "current_model", "gpt-4o")
 
     db.start_new_dialog(user_id)
-    await update.message.reply_text("Starting new dialog ✅")
+    await update.message.reply_text(messages.MESSAGES["new_dialog"])
 
     chat_mode = db.get_user_attribute(user_id, "current_chat_mode")
     await update.message.reply_text(
@@ -909,7 +912,7 @@ async def show_balance_handle(update: Update, context: CallbackContext):
 
 async def edited_message_handle(update: Update, context: CallbackContext):
     if update.edited_message.chat.type == "private":
-        text = "🥲 Unfortunately, message <b>editing</b> is not supported"
+        text = messages.MESSAGES["editing_not_supported"]
         await update.edited_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
@@ -924,7 +927,7 @@ async def error_handle(update: Update, context: CallbackContext) -> None:
         tb_string = "".join(tb_list)
         update_str = update.to_dict() if isinstance(update, Update) else str(update)
         message = (
-            f"An exception was raised while handling an update\n"
+            f"Произошла ошибка при обработке запроса\n"
             f"<pre>update = {html.escape(json.dumps(update_str, indent=2, ensure_ascii=False))}"
             "</pre>\n\n"
             f"<pre>{html.escape(tb_string)}</pre>"
@@ -941,7 +944,7 @@ async def error_handle(update: Update, context: CallbackContext) -> None:
                 await context.bot.send_message(update.effective_chat.id, message_chunk)
     except:
         await context.bot.send_message(
-            update.effective_chat.id, "Some error in error handler"
+            update.effective_chat.id, messages.MESSAGES["error_handler"]
         )
 
 
