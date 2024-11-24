@@ -113,11 +113,11 @@ async def start_handle(update: Update, context: CallbackContext):
     db.set_user_attribute(user_id, "last_interaction", datetime.now())
     db.start_new_dialog(user_id)
 
-    reply_text = messages.MESSAGES["start_message"]
-    reply_text += messages.HELP_MESSAGE
-
-    await update.message.reply_text(reply_text, parse_mode=ParseMode.HTML)
-    await show_chat_modes_handle(update, context)
+    chat_mode = db.get_user_attribute(user_id, "current_chat_mode")
+    await update.message.reply_text(
+        f"{config.chat_modes[chat_mode]['welcome_message']}", parse_mode=ParseMode.HTML
+    )
+    # await show_chat_modes_handle(update, context)
 
 
 async def help_handle(update: Update, context: CallbackContext):
@@ -341,7 +341,7 @@ async def unsupport_message_handle(
 ):
     error_text = messages.MESSAGES["file_not_supported"]
     logger.error(error_text)
-    await update.message.reply_text(error_text)
+    await update.message.reply_text(error_text, parse_mode=ParseMode.HTML)
     return
 
 
@@ -1020,17 +1020,17 @@ def run_bot() -> None:
         MessageHandler(filters.VOICE & user_filter, unsupport_message_handle)
     )
 
-    application.add_handler(
-        CommandHandler("mode", show_chat_modes_handle, filters=user_filter)
-    )
-    application.add_handler(
-        CallbackQueryHandler(
-            show_chat_modes_callback_handle, pattern="^show_chat_modes"
-        )
-    )
-    application.add_handler(
-        CallbackQueryHandler(set_chat_mode_handle, pattern="^set_chat_mode")
-    )
+    # application.add_handler(
+    #     CommandHandler("mode", show_chat_modes_handle, filters=user_filter)
+    # )
+    # application.add_handler(
+    #     CallbackQueryHandler(
+    #         show_chat_modes_callback_handle, pattern="^show_chat_modes"
+    #     )
+    # )
+    # application.add_handler(
+    #     CallbackQueryHandler(set_chat_mode_handle, pattern="^set_chat_mode")
+    # )
 
     # application.add_handler(
     #     CommandHandler("settings", settings_handle, filters=user_filter)
