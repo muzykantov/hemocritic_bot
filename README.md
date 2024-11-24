@@ -1,113 +1,85 @@
-# ChatGPT Telegram Bot: **GPT-4. Fast. No daily limits. Special chat modes**
+# 🧪 Hemocritic Bot - умный анализ результатов крови в Telegram
 
-<div align="center">
-<img src="https://raw.githubusercontent.com/karfly/chatgpt_telegram_bot/main/static/header.png" align="center" style="width: 100%" />
-</div>
+Hemocritic - это Telegram-бот для автоматического анализа результатов клинических исследований крови. Бот мгновенно обрабатывает загруженные анализы и предоставляет понятные рекомендации.
 
-<br>
+## ✨ Возможности
 
-<p align="center">
-<a href="https://t.me/chatgpt_karfly_bot?start=source=github" alt="Run Telegram Bot shield"><img src="https://img.shields.io/badge/RUN-Telegram%20Bot-blue?logo=data:image/svg+xml;base64,PHN2ZyBpZD0iTGl2ZWxsb18xIiBkYXRhLW5hbWU9IkxpdmVsbG8gMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMCAwIDI0MCAyNDAiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMTIwIiB5MT0iMjQwIiB4Mj0iMTIwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMWQ5M2QyIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMzhiMGUzIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHRpdGxlPlRlbGVncmFtX2xvZ288L3RpdGxlPjxjaXJjbGUgY3g9IjEyMCIgY3k9IjEyMCIgcj0iMTIwIiBmaWxsPSJ1cmwoI2xpbmVhci1ncmFkaWVudCkiLz48cGF0aCBkPSJNODEuMjI5LDEyOC43NzJsMTQuMjM3LDM5LjQwNnMxLjc4LDMuNjg3LDMuNjg2LDMuNjg3LDMwLjI1NS0yOS40OTIsMzAuMjU1LTI5LjQ5MmwzMS41MjUtNjAuODlMODEuNzM3LDExOC42WiIgZmlsbD0iI2M4ZGFlYSIvPjxwYXRoIGQ9Ik0xMDAuMTA2LDEzOC44NzhsLTIuNzMzLDI5LjA0NnMtMS4xNDQsOC45LDcuNzU0LDAsMTcuNDE1LTE1Ljc2MywxNy40MTUtMTUuNzYzIiBmaWxsPSIjYTljNmQ4Ii8+PHBhdGggZD0iTTgxLjQ4NiwxMzAuMTc4LDUyLjIsMTIwLjYzNnMtMy41LTEuNDItMi4zNzMtNC42NGMuMjMyLS42NjQuNy0xLjIyOSwyLjEtMi4yLDYuNDg5LTQuNTIzLDEyMC4xMDYtNDUuMzYsMTIwLjEwNi00NS4zNnMzLjIwOC0xLjA4MSw1LjEtLjM2MmEyLjc2NiwyLjc2NiwwLDAsMSwxLjg4NSwyLjA1NSw5LjM1Nyw5LjM1NywwLDAsMSwuMjU0LDIuNTg1Yy0uMDA5Ljc1Mi0uMSwxLjQ0OS0uMTY5LDIuNTQyLS42OTIsMTEuMTY1LTIxLjQsOTQuNDkzLTIxLjQsOTQuNDkzcy0xLjIzOSw0Ljg3Ni01LjY3OCw1LjA0M0E4LjEzLDguMTMsMCwwLDEsMTQ2LjEsMTcyLjVjLTguNzExLTcuNDkzLTM4LjgxOS0yNy43MjctNDUuNDcyLTMyLjE3N2ExLjI3LDEuMjcsMCwwLDEtLjU0Ni0uOWMtLjA5My0uNDY5LjQxNy0xLjA1LjQxNy0xLjA1czUyLjQyNi00Ni42LDUzLjgyMS01MS40OTJjLjEwOC0uMzc5LS4zLS41NjYtLjg0OC0uNC0zLjQ4MiwxLjI4MS02My44NDQsMzkuNC03MC41MDYsNDMuNjA3QTMuMjEsMy4yMSwwLDAsMSw4MS40ODYsMTMwLjE3OFoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" width="230"/></a>
-</p>
+- Быстрый анализ результатов (около 30 секунд)
+- Поддержка PDF-файлов и фотографий бланков
+- Работа с результатами из всех основных лабораторий
+- Персонализированные рекомендации с учетом пола, возраста и других параметров
+- Понятные объяснения отклонений от нормы
+- Защищенная обработка медицинских данных
 
+## 🚀 Как использовать
 
-We all love [chat.openai.com](https://chat.openai.com), but... It's TERRIBLY laggy, has daily limits, and is only accessible through an archaic web interface.
+1. Найдите бота в Telegram: [@Hemocritic_bot](https://t.me/Hemocritic_bot)
+2. Отправьте фото или PDF-файл с результатами анализа
+3. При необходимости укажите дополнительные данные (возраст, пол, вес, рост)
+4. Получите подробный анализ и рекомендации
 
-This repo is ChatGPT re-created as Telegram Bot. **And it works great.**
+## 📋 Поддерживаемые форматы данных
 
-You can deploy your own bot, or use mine: [@chatgpt_karfly_bot](https://t.me/chatgpt_karfly_bot)
+- PDF-файлы с результатами анализов
+- Фотографии бланков
+- Текстовые данные в структурированном формате
 
-## Features
-- Low latency replies (it usually takes about 3-5 seconds)
-- No request limits
-- Message streaming (watch demo)
-- GPT-4 and GPT-4 Turbo support
-- GPT-4 Vision support
-- Group Chat support (/help_group_chat to get instructions)
-- DALLE 2 (choose 👩‍🎨 Artist mode to generate images)
-- Voice message recognition
-- Code highlighting
-- 15 special chat modes: 👩🏼‍🎓 Assistant, 👩🏼‍💻 Code Assistant, 👩‍🎨 Artist, 🧠 Psychologist, 🚀 Elon Musk and other. You can easily create your own chat modes by editing `config/chat_modes.yml`
-- Support of [ChatGPT API](https://platform.openai.com/docs/guides/chat/introduction)
-- List of allowed Telegram users
-- Track $ balance spent on OpenAI API
+## 🛠 Технические требования
 
-<p align="center">
-  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmM2ZWVjY2M4NWQ3ZThkYmQ3MDhmMTEzZGUwOGFmOThlMDIzZGM4YiZjdD1n/unx907h7GSiLAugzVX/giphy.gif" />
-</p>
+Для запуска собственной копии бота необходимо:
 
----
+1. Python 3.8 или выше
+2. Docker и Docker Compose
+3. Токен Telegram Bot API
+4. Токен OpenAI API
 
-## News
-- *21 Apr 2023*:
-    - DALLE 2 support
-    - Group Chat support (/help_group_chat to get instructions)
-    - 10 new hot chat modes and updated chat mode menu with pagination: 🇬🇧 English Tutor, 🧠 Psychologist, 🚀 Elon Musk, 📊 SQL Assistant and other.
-- *24 Mar 2023*: GPT-4 support. Run `/settings` command to choose model
-- *15 Mar 2023*: Added message streaming. Now you don't have to wait until the whole message is ready, it's streamed to Telegram part-by-part (watch demo)
-- *9 Mar 2023*: Now you can easily create your own Chat Modes by editing `config/chat_modes.yml`
-- *8 Mar 2023*: Added voice message recognition with [OpenAI Whisper API](https://openai.com/blog/introducing-chatgpt-and-whisper-apis). Record a voice message and ChatGPT will answer you!
-- *2 Mar 2023*: Added support of [ChatGPT API](https://platform.openai.com/docs/guides/chat/introduction).
-- *1 Aug 2023*: Added OpenAI API Base to config (useful while using OpenAI-compatible API like [LocalAI](https://github.com/go-skynet/LocalAI))
-- *15 Nov 2023*: Added support of [GPT-4 Turbo](https://help.openai.com/en/articles/8555510-gpt-4-turbo)
-- *2 Apt 2024*: Added [GPT-4 Vision](https://platform.openai.com/docs/guides/vision) support
+## ⚙️ Установка и запуск
 
-## Bot commands
-- `/retry` – Regenerate last bot answer
-- `/new` – Start new dialog
-- `/mode` – Select chat mode
-- `/balance` – Show balance
-- `/settings` – Show settings
-- `/help` – Show help
+1. Клонируйте репозиторий:
+```bash
+git clone https://github.com/muzykantov/hemocritic_bot.git
+cd hemocritic_bot
+```
 
-## Setup
-1. Get your [OpenAI API](https://openai.com/api/) key
+2. Создайте конфигурационные файлы:
+```bash
+cp config/config.example.yml config/config.yml
+cp config/config.example.env config/config.env
+```
 
-2. Get your Telegram bot token from [@BotFather](https://t.me/BotFather)
+3. Отредактируйте `config/config.yml` и `config/config.env`, указав ваши токены
 
-3. Edit `config/config.example.yml` to set your tokens and run 2 commands below (*if you're advanced user, you can also edit* `config/config.example.env`):
-    ```bash
-    mv config/config.example.yml config/config.yml
-    mv config/config.example.env config/config.env
-    ```
+4. Запустите бота через Docker Compose:
+```bash
+docker-compose --env-file config/config.env up --build
+```
 
-4. 🔥 And now **run**:
-    ```bash
-    docker-compose --env-file config/config.env up --build
-    ```
+## 🔒 Безопасность
 
-## ❤️ Top donations
-You can be in this list:
+- Бот не хранит результаты анализов и персональные данные
+- Все данные обрабатываются в оперативной памяти и удаляются после анализа
+- Взаимодействие с ботом происходит через защищенный протокол Telegram
 
-1. [LilRocco](https://t.me/LilRocco). Donation: **11000$** (!!!)
+## 📝 Команды бота
 
-1. [Mr V](https://t.me/mr_v_v_v). Donation **250$**
+- `/start` - Начать работу с ботом
+- `/help` - Получить справку по использованию
+- `/new` - Начать новый анализ
+- `/cancel` - Отменить текущий анализ
 
-1. [unexpectedsunday](https://t.me/unexpectedsunday). Donation: **150$**
+## 🤝 Вклад в проект
 
-1. [Sem](https://t.me/sembrestels). Donation: **100$**
+Мы приветствуем вклад в развитие проекта! Если вы хотите помочь:
 
-1. [Miksolo](https://t.me/Miksolo). Donation: **81$**
+1. Создайте форк репозитория
+2. Внесите изменения
+3. Создайте Pull Request
 
-    *Message:* Thank you. Using this docker container every day! Actually created the same project but its good to see that this one is being supported often. Will continue using it! Good architecture choices made in the code 💪!
+## 📜 Лицензия
 
-1. [Ryo](https://t.me/ryokihara). Donation: **80$**
+MIT License. Подробности в файле [LICENSE](LICENSE)
 
-1. [Ilias Ism](https://twitter.com/illyism). Donation: **69$**
+## ✉️ Контакты
 
-    *Message:* I wanted to thank you for your amazing code! It helped me start my own Telegram ChatGPT bot and add a bunch of cool features. I really appreciate your hard work on this project. For anyone interested in trying my bot, feel free to check it out here: [magicbuddy.chat](https://magicbuddy.chat) 🤖 Thanks again! 😊
-
-1. [Sebastian](https://t.me/dell1503). Donation: **55$**
-
-1. [Alexander Zimin](https://t.me/azimin). Donation: **50$**
-
-1. [Kbaji20](https://t.me/Kbaji20). Donation: **30$**
-
-1. [Hans Blinken](https://t.me/hblink). Donation: **10$**
-
-## Contributors
-- Main contributor: @karfly
-- [Jadve AI](https://jadve.com).
-
-## References
-1. [*Build ChatGPT from GPT-3*](https://learnprompting.org/docs/applied_prompting/build_chatgpt)
+По всем вопросам обращайтесь:
+- Telegram: [@Liana_Gg](https://t.me/Liana_Gg)
