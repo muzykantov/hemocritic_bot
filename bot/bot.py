@@ -8,6 +8,7 @@ import traceback
 from datetime import datetime
 
 import database
+import messages
 import openai
 import openai_utils
 import telegram
@@ -39,29 +40,8 @@ logger = logging.getLogger(__name__)
 user_semaphores = {}
 user_tasks = {}
 
-HELP_MESSAGE = """Commands:
-⚪ /retry – Regenerate last bot answer
-⚪ /new – Start new dialog
-⚪ /mode – Select chat mode
-⚪ /settings – Show settings
-⚪ /balance – Show balance
-⚪ /help – Show help
-
-🎨 Generate images from text prompts in <b>👩‍🎨 Artist</b> /mode
-👥 Add bot to <b>group chat</b>: /help_group_chat
-🎤 You can send <b>Voice Messages</b> instead of text
-"""
-
-HELP_GROUP_CHAT_MESSAGE = """You can add bot to any <b>group chat</b> to help and entertain its participants!
-
-Instructions (see <b>video</b> below):
-1. Add the bot to the group chat
-2. Make it an <b>admin</b>, so that it can see messages (all other rights can be restricted)
-3. You're awesome!
-
-To get a reply from the bot in the chat – @ <b>tag</b> it or <b>reply</b> to its message.
-For example: "{bot_username} write a poem about Telegram"
-"""
+HELP_MESSAGE = messages.HELP_MESSAGE
+HELP_GROUP_CHAT_MESSAGE = messages.HELP_GROUP_CHAT_MESSAGE
 
 
 def split_text_into_chunks(text, chunk_size):
@@ -136,8 +116,8 @@ async def start_handle(update: Update, context: CallbackContext):
     db.set_user_attribute(user_id, "last_interaction", datetime.now())
     db.start_new_dialog(user_id)
 
-    reply_text = "Hi! I'm <b>ChatGPT</b> bot implemented with OpenAI API 🤖\n\n"
-    reply_text += HELP_MESSAGE
+    reply_text = messages.MESSAGES["start_message"]
+    reply_text += messages.HELP_MESSAGE
 
     await update.message.reply_text(reply_text, parse_mode=ParseMode.HTML)
     await show_chat_modes_handle(update, context)
@@ -155,7 +135,9 @@ async def help_group_chat_handle(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     db.set_user_attribute(user_id, "last_interaction", datetime.now())
 
-    text = HELP_GROUP_CHAT_MESSAGE.format(bot_username="@" + context.bot.username)
+    text = messages.HELP_GROUP_CHAT_MESSAGE.format(
+        bot_username="@" + context.bot.username
+    )
 
     await update.message.reply_text(text, parse_mode=ParseMode.HTML)
     await update.message.reply_video(config.help_group_chat_video_path)
@@ -171,7 +153,7 @@ async def retry_handle(update: Update, context: CallbackContext):
 
     dialog_messages = db.get_dialog_messages(user_id, dialog_id=None)
     if len(dialog_messages) == 0:
-        await update.message.reply_text("No message to retry 🤷‍♂️")
+        await update.message.reply_text(messages.MESSAGES["no_retry_message"])
         return
 
     last_dialog_message = dialog_messages.pop()
@@ -212,7 +194,9 @@ async def _vision_message_handle_fn(
         ) > 0:
             db.start_new_dialog(user_id)
             await update.message.reply_text(
-                f"Starting new dialog due to timeout (<b>{config.chat_modes[chat_mode]['name']}</b> mode) ✅",
+                messages.MESSAGES["timeout_new_dialog"].format(
+                    mode_name=config.chat_modes[chat_mode]["name"]
+                ),
                 parse_mode=ParseMode.HTML,
             )
     db.set_user_attribute(user_id, "last_interaction", datetime.now())
@@ -419,7 +403,7 @@ async def message_handle(
 
             if _message is None or len(_message) == 0:
                 await update.message.reply_text(
-                    "🥲 You sent <b>empty message</b>. Please, try again!",
+                    messages.MESSAGES["empty_message"],
                     parse_mode=ParseMode.HTML,
                 )
                 return
@@ -681,13 +665,13 @@ async def cancel_handle(update: Update, context: CallbackContext):
         task.cancel()
     else:
         await update.message.reply_text(
-            "<i>Nothing to cancel...</i>", parse_mode=ParseMode.HTML
+            messages.MESSAGES["nothing_to_cancel"], parse_mode=ParseMode.HTML
         )
 
 
 def get_chat_mode_menu(page_index: int):
     n_chat_modes_per_page = config.n_chat_modes_per_page
-    text = f"Select <b>chat mode</b> ({len(config.chat_modes)} modes available):"
+    text = messages.MENU_MESSAGES["chat_mode_select"].format(n=len(config.chat_modes))
 
     # buttons
     chat_mode_keys = list(config.chat_modes.keys())
@@ -879,7 +863,7 @@ async def show_balance_handle(update: Update, context: CallbackContext):
     n_generated_images = db.get_user_attribute(user_id, "n_generated_images")
     n_transcribed_seconds = db.get_user_attribute(user_id, "n_transcribed_seconds")
 
-    details_text = "🏷️ Details:\n"
+    details_text = messages.BALANCE_MESSAGES["balance_details"]
     for model_key in sorted(n_used_tokens_dict.keys()):
         n_input_tokens, n_output_tokens = (
             n_used_tokens_dict[model_key]["n_input_tokens"],
@@ -915,8 +899,9 @@ async def show_balance_handle(update: Update, context: CallbackContext):
 
     total_n_spent_dollars += voice_recognition_n_spent_dollars
 
-    text = f"You spent <b>{total_n_spent_dollars:.03f}$</b>\n"
-    text += f"You used <b>{total_n_used_tokens}</b> tokens\n\n"
+    text = messages.BALANCE_MESSAGES["balance_header"].format(
+        total_spent=total_n_spent_dollars, total_tokens=total_n_used_tokens
+    )
     text += details_text
 
     await update.message.reply_text(text, parse_mode=ParseMode.HTML)
@@ -963,12 +948,8 @@ async def error_handle(update: Update, context: CallbackContext) -> None:
 async def post_init(application: Application):
     await application.bot.set_my_commands(
         [
-            BotCommand("/new", "Start new dialog"),
-            BotCommand("/mode", "Select chat mode"),
-            BotCommand("/retry", "Re-generate response for previous query"),
-            BotCommand("/balance", "Show balance"),
-            BotCommand("/settings", "Show settings"),
-            BotCommand("/help", "Show help message"),
+            BotCommand(command, description)
+            for command, description in messages.BOT_COMMANDS
         ]
     )
 
