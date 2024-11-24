@@ -3,22 +3,12 @@ version: "3"
 services:
   mongo:
     container_name: mongo
-    image: mongo:latest
+    image: mongo:4.4.18
     restart: always
     ports:
       - 127.0.0.1:${MONGODB_PORT:-27017}:${MONGODB_PORT:-27017}
     volumes:
       - ${MONGODB_PATH:-./mongodb}:/data/db
-
-  chatgpt_telegram_bot:
-    container_name: chatgpt_telegram_bot
-    command: python3 bot/bot.py
-    restart: always
-    build:
-      context: "."
-      dockerfile: Dockerfile
-    depends_on:
-      - mongo
 
   mongo_express:
     container_name: mongo-express
@@ -35,3 +25,13 @@ services:
       - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASSWORD:-password}
     depends_on:
       - mongo
+
+  # chatgpt_telegram_bot:
+  #   container_name: chatgpt_telegram_bot
+  #   command: python3 bot/bot.py
+  #   restart: always
+  #   build:
+  #     context: "."
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - mongo

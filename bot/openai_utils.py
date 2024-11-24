@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 OPENAI_COMPLETION_OPTIONS = {
-    "temperature": 0.7,
-    "max_tokens": 1000,
+    "temperature": 0.1,
+    "max_tokens": 4096,
     "top_p": 1,
     "frequency_penalty": 0,
     "presence_penalty": 0,
@@ -25,7 +25,7 @@ OPENAI_COMPLETION_OPTIONS = {
 
 
 class ChatGPT:
-    def __init__(self, model="gpt-3.5-turbo"):
+    def __init__(self, model="gpt-4o"):
         assert model in {
             "text-davinci-003",
             "gpt-3.5-turbo-16k",
