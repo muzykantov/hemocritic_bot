@@ -9,6 +9,7 @@ from datetime import datetime
 
 import database
 import messages
+import fitz
 import openai
 import openai_utils
 import telegram
@@ -199,7 +200,21 @@ async def _vision_message_handle_fn(
     db.set_user_attribute(user_id, "last_interaction", datetime.now())
 
     buf = None
-    if update.message.effective_attachment:
+    if update.message.document:
+        file_info = update.message.document
+        pdf_file = await context.bot.get_file(file_info.file_id)
+
+        buf = io.BytesIO()
+        await pdf_file.download_to_memory(buf)
+
+        doc = fitz.open(stream=buf)
+        buf.seek(0)
+        for page in doc:
+            pixmap = page.get_pixmap(dpi=300)
+            pixmap.pil_save(buf, format="JPEG")
+        buf.name = "pdf_page.jpg"
+        buf.seek(0)
+    elif update.message.effective_attachment:
         photo = update.message.effective_attachment[-1]
         photo_file = await context.bot.get_file(photo.file_id)
 
@@ -997,6 +1012,12 @@ def run_bot() -> None:
     application.add_handler(
         MessageHandler(
             filters.VIDEO & ~filters.COMMAND & user_filter, unsupport_message_handle
+        )
+    )
+    application.add_handler(
+        MessageHandler(
+            filters.Document.PDF & ~filters.COMMAND & user_filter,
+            message_handle,
         )
     )
     application.add_handler(
