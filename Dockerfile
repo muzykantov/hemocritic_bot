@@ -7,7 +7,6 @@ RUN \
     python3-pip \
     build-essential \
     python3-venv \
-    ffmpeg \
     git \
     ; \
     rm -rf /var/lib/apt/lists/*

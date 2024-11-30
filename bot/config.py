@@ -6,7 +6,7 @@ import yaml
 config_dir = Path(__file__).parent.parent.resolve() / "config"
 
 # load yaml config
-with open(config_dir / "config.yml", "r") as f:
+with open(config_dir / "config.yml", "r", encoding="utf-8") as f:
     config_yaml = yaml.safe_load(f)
 
 # load .env config
@@ -29,7 +29,7 @@ mongodb_port = config_env.get("MONGODB_PORT", "27017")
 mongodb_uri = f"mongodb://{mongodb_host}:{mongodb_port}"
 
 # chat_modes
-with open(config_dir / "chat_modes.yml", "r") as f:
+with open(config_dir / "chat_modes.yml", "r", encoding="utf-8") as f:
     chat_modes = yaml.safe_load(f)
 
 # models
