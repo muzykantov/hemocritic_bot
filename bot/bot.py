@@ -208,12 +208,7 @@ async def _vision_message_handle_fn(
         await pdf_file.download_to_memory(buf)
 
         doc = fitz.open(stream=buf)
-        buf.seek(0)
-        for page in doc:
-            pixmap = page.get_pixmap(dpi=300)
-            pixmap.pil_save(buf, format="JPEG")
-        buf.name = "pdf_page.jpg"
-        buf.seek(0)
+        buf = _pdf_to_single_buffer(doc)
     elif update.message.effective_attachment:
         photo = update.message.effective_attachment[-1]
         photo_file = await context.bot.get_file(photo.file_id)
@@ -349,6 +344,57 @@ async def _vision_message_handle_fn(
         logger.error(error_text)
         await update.message.reply_text(error_text)
         return
+
+
+def _pdf_to_single_buffer(doc: fitz.Document, dpi: int = 300) -> io.BytesIO:
+    """
+    Convert all pages of a PDF document to a single vertical image buffer.
+
+    Args:
+        doc: PyMuPDF Document object
+        dpi: Resolution for rendering, default 300
+
+    Returns:
+        io.BytesIO: Buffer containing the combined image of all pages
+    """
+    from PIL import Image
+
+    # Get dimensions of all pages
+    page_images = []
+    total_height = 0
+    max_width = 0
+
+    # Convert each page to image and collect dimensions
+    for page in doc:
+        pixmap = page.get_pixmap(dpi=dpi)
+
+        # Convert pixmap to PIL Image
+        img_buffer = io.BytesIO()
+        pixmap.pil_save(img_buffer, format="PNG")
+        img_buffer.seek(0)
+        img = Image.open(img_buffer)
+
+        page_images.append(img)
+        total_height += img.height
+        max_width = max(max_width, img.width)
+
+    # Create new image with combined dimensions
+    combined_image = Image.new('RGB', (max_width, total_height), 'white')
+
+    # Paste all pages vertically
+    current_height = 0
+    for img in page_images:
+        # Center the image horizontally if it's narrower than the widest page
+        x_offset = (max_width - img.width) // 2
+        combined_image.paste(img, (x_offset, current_height))
+        current_height += img.height
+
+    # Save combined image to buffer
+    output_buffer = io.BytesIO()
+    combined_image.save(output_buffer, format='JPEG', quality=95)
+    output_buffer.seek(0)
+
+    return output_buffer
 
 
 async def unsupport_message_handle(
