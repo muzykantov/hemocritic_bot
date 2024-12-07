@@ -6,6 +6,9 @@ Hemocritic - это Telegram-бот для автоматического ана
 - [Презентация проекта](https://github.com/muzykantov/hemocritic_bot/blob/main/%D0%A5%D0%B0%D0%BA%D0%B0%D1%82%D0%BE%D0%BD%20DSMED%20x%20MFTIBIO.%20%D0%9A%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D0%B0%206.pdf)
 - [Демонстрация работы бота](https://github.com/muzykantov/hemocritic_bot/blob/main/Demo.mp4)
 
+## Демонстрация работы бота
+https://user-images.githubusercontent.com/muzykantov/hemocritic_bot/Demo.mp4
+
 ## ✨ Возможности
 - Быстрый анализ результатов (около 30 секунд)
 - Поддержка PDF-файлов и фотографий бланков
